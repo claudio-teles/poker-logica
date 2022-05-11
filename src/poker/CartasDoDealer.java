@@ -16,4 +16,9 @@ public class CartasDoDealer {
 		this.cartasDoDealer = cartasDoDealer;
 	}
 
+	@Override
+	public String toString() {
+		return "CartasDoDealer [cartasDoDealer=" + cartasDoDealer + "]";
+	}
+
 }

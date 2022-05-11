@@ -39,4 +39,9 @@ public class Ficha {
 		this.localDaImagem = localDaImagem;
 	}
 
+	@Override
+	public String toString() {
+		return "Ficha [valor=" + valor + ", cor=" + cor + ", localDaImagem=" + localDaImagem + "]";
+	}
+
 }

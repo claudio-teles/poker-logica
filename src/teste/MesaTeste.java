@@ -1,6 +1,8 @@
 package teste;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +13,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import poker.Baralho;
+import poker.CartasDoDealer;
 import poker.Ficha;
+import poker.Jogador;
 import poker.Mesa;
 
 public class MesaTeste {
 	Mesa mesa;
 	Mesa mesaComErro;
 	List<Ficha> fichasEmtregues;
+	List<Jogador> jogadores;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -28,10 +34,27 @@ public class MesaTeste {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		mesa = new Mesa();
+		jogadores = new ArrayList<>();
+		
+		try {
+			jogadores.add(new Jogador(1, "J1", mesa.entregarStack(800)));
+			jogadores.add(new Jogador(2, "J2", mesa.entregarStack(1250)));
+			jogadores.add(new Jogador(3, "J3", mesa.entregarStack(1300)));
+			jogadores.add(new Jogador(4, "J4", mesa.entregarStack(900)));
+			jogadores.add(new Jogador(5, "J5", mesa.entregarStack(1100)));
+			jogadores.add(new Jogador(6, "J6", mesa.entregarStack(1480)));
+			jogadores.add(new Jogador(7, "J7", mesa.entregarStack(1780)));
+			jogadores.add(new Jogador(8, "J8", mesa.entregarStack(2000)));
+			
+			jogadores.add(new Jogador(9, "J9", mesa.entregarStack(19)));
+			jogadores.add(new Jogador(10, "J10", mesa.entregarStack(8)));
+		} catch (Exception e1) {
+			
+		}
 		mesaComErro = new Mesa();
 		
-		mesa = new Mesa();
 		
 		fichasEmtregues = new ArrayList<>();
 		try {
@@ -118,6 +141,24 @@ public class MesaTeste {
 		.forEach(ficha -> fichas500.add(ficha));
 		
 		assertEquals(2, fichas500.size());
+	}
+	
+	@Test
+	public void testeDefinirDealerRetornaUmJogadorComCartaMaisAltaRetornaNull() {
+		mesa.setIntencaoEscolherDealer(false);
+		Jogador j = new Jogador(15, "j15");
+		CartasDoDealer cartasDoDealer = new CartasDoDealer();
+		cartasDoDealer.setCartasDoDealer(j.distribuirCartasDoDealer(new Baralho(), jogadores, mesa));
+		assertNull(mesa.definirDealer(jogadores, cartasDoDealer));
+	}
+	
+	@Test
+	public void testeDefinirDealerRetornaUmJogadorComCartaMaisAlta() {
+		mesa.setIntencaoEscolherDealer(true);
+		Jogador j = new Jogador(15, "j15");
+		CartasDoDealer cartasDoDealer = new CartasDoDealer();
+		cartasDoDealer.setCartasDoDealer(j.distribuirCartasDoDealer(new Baralho(), jogadores, mesa));
+		assertNotNull(mesa.definirDealer(jogadores, cartasDoDealer));
 	}
 
 }

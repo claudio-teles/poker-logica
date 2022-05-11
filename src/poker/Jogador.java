@@ -30,6 +30,13 @@ public class Jogador {
 		this.nome = nome;
 	}
 
+	public Jogador(int indice, String nome, List<Ficha> fichas) {
+		super();
+		this.indice = indice;
+		this.nome = nome;
+		this.fichas = fichas;
+	}
+
 	public int getIndice() {
 		return indice;
 	}
@@ -142,7 +149,7 @@ public class Jogador {
 				Carta cartaSelecionda = baralho.getCartas().get(new Random().nextInt((51)+1));
 				if (!cartasDoDealer.contains(cartaSelecionda)) {
 					cartasDoDealer.add(cartaSelecionda);
-					if (cartasDoDealer.size() == 8) {
+					if (cartasDoDealer.size() == jogadores.size()) {
 						cicloDeContagem = false;
 					}
 				} else {
@@ -193,6 +200,14 @@ public class Jogador {
 	
 	public void mostrarCartasDaMao() {
 		System.out.println("super clase Jogador.mostrarCartasDaMao");
+	}
+
+	@Override
+	public String toString() {
+		return "Jogador [indice=" + indice + ", nome=" + nome + ", imagem=" + imagem + ", dinheiro=" + dinheiro
+				+ ", stack=" + stack + ", valorDaFicha=" + valorDaFicha + ", fichas=" + fichas + ", mao=" + mao
+				+ ", vezDeJogar=" + vezDeJogar + ", vencedor=" + vencedor + ", fichasDeApostaRodada="
+				+ fichasDeApostaRodada + ", visivel=" + visivel + ", acaoDoJogador=" + acaoDoJogador + "]";
 	}
 	
 }

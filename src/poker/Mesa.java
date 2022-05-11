@@ -1,7 +1,9 @@
 package poker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Mesa {
 	
@@ -17,6 +19,7 @@ public class Mesa {
 	private Painel painel;
 	private boolean rodadaEmAndamento;
 	private List<Jogador> jogadoresDoTorneio;
+	private boolean smallBlindApostado;
 
 	public Mesa() {}
 	
@@ -116,49 +119,57 @@ public class Mesa {
 		this.jogadoresDoTorneio = jogadoresDoTorneio;
 	}
 
+	public boolean isSmallBlindApostado() {
+		return smallBlindApostado;
+	}
+
+	public void setSmallBlindApostado(boolean smallBlindApostado) {
+		this.smallBlindApostado = smallBlindApostado;
+	}
+
 	public List<Ficha> entregarStack(int valorDaStack) throws Exception {
 		List<Ficha> fichas = new ArrayList<>();
 		if (valorDaStack >= 20) {
 			int sobrou = valorDaStack;
 			if (sobrou > 15) {
 				for (int i = 1; i <= 15; i++) {
-					fichas.add(new Ficha(sobrou - 1, "branco", null));// 15 x 1
+					fichas.add(new Ficha(1, "branco", null));// 15 x 1
 					sobrou -= 1;
 				}
 			}
 			if (sobrou > 50) {
 				for (int i = 1; i <= 10; i++) {
-					fichas.add(new Ficha(sobrou - 5, "vermelho", null));// 10 x 5
+					fichas.add(new Ficha(5, "vermelho", null));// 10 x 5
 					sobrou -= 5;
 				}
 			}
 			if (sobrou > 50) {
 				for (int i = 1; i <= 5; i++) {
-					fichas.add(new Ficha(sobrou - 10, "laranja", null));// 5 x 10
+					fichas.add(new Ficha(10, "laranja", null));// 5 x 10
 					sobrou -= 10;
 				}
 			}
 			if (sobrou > 80) {
 				for (int i = 1; i <= 4; i++) {
-					fichas.add(new Ficha(sobrou - 20, "amarelo", null));// 4 x 20
+					fichas.add(new Ficha(20, "amarelo", null));// 4 x 20
 					sobrou -= 20;
 				}
 			}
 			if (sobrou > 75) {
 				for (int i = 1; i <= 3; i++) {
-					fichas.add(new Ficha(sobrou - 25, "verde", null));// 3 x 25
+					fichas.add(new Ficha(25, "verde", null));// 3 x 25
 					sobrou -= 25;
 				}
 			}
 			if (sobrou > 500) {
 				for (int i = 1; i <= 5; i++) {
-					fichas.add(new Ficha(sobrou - 100, "preto", null));// 5 x 100
+					fichas.add(new Ficha(100, "preto", null));// 5 x 100
 					sobrou -= 100;
 				}
 			}
 			if (sobrou > 1000) {
 				for (int i = 1; i <= 2; i++) {
-					fichas.add(new Ficha(sobrou - 500, "roxo", null));// 2 x 500
+					fichas.add(new Ficha(500, "roxo", null));// 2 x 500
 					sobrou -= 500;
 				}
 			}
@@ -172,10 +183,69 @@ public class Mesa {
 		
 	}
 	
-	public void definirDealer(List<Jogador> jogadores, List<CartasDoDealer> cartasDoDealer) {
+	@SuppressWarnings("unlikely-arg-type")
+	public Jogador definirDealer(List<Jogador> jogadores, CartasDoDealer cartasDoDealer) {
+		Jogador jogadorComCartaDeMaiorValor = new Jogador();
 		
+		if (intencaoEscolherDealer) {
+			int somatorio = 0;
+			List<Jogador> jogadoresAptos = new ArrayList<>();
+			
+			for (Jogador jogador : jogadores) {
+				for (Ficha ficha : jogador.getFichas()) {
+					somatorio += ficha.getValor();
+					if (somatorio >= 20) {
+						jogadoresAptos.add(jogador);
+					}
+				}
+				somatorio = 0;
+			}
+			
+			int quantidadeDeJogadoresPraRetirar = (jogadores.size() - jogadoresAptos.size());
+			
+			List<Integer> listaDeNumeros = new ArrayList<>();
+			Map<Integer, Jogador> m = new HashMap<>();
+			
+			List<Carta> novasCartas = cartasDoDealer.getCartasDoDealer();
+			for (int i = 0; i < quantidadeDeJogadoresPraRetirar; i++) {
+				novasCartas.remove(novasCartas.size() - 1);
+			}
+			
+			for (Carta carta : novasCartas) {
+				listaDeNumeros.add((int) carta.getValor());
+			}
+			
+			for (int i = 0; i < novasCartas.size(); i++) {
+				Jogador j = jogadores.get(i);
+				Carta c = cartasDoDealer.getCartasDoDealer().get(i);
+				
+				if (!listaDeNumeros.contains(c.getValor())) {
+					m.put((int) c.getValor(), j);
+				}
+			}
+			
+			jogadorComCartaDeMaiorValor = m.get(maiorValor(listaDeNumeros));
+							
+		} else {
+			smallBlindApostado = false;
+			return null;
+		}
+		return jogadorComCartaDeMaiorValor;
 	}
 	
+	public int maiorValor(List<Integer> listaDeNumeros) {
+		int numero = 0;
+		for (int i = 0; i < listaDeNumeros.size(); i++) {
+			int n = listaDeNumeros.get(i);
+			if (n == numero) {
+				continue;
+			} else if (n > numero) {
+				numero = n;
+			}
+		}
+		return numero;
+	}
+
 	public void definirQuantidadeDeJogadores(int quantidadeDeJogadores) {
 		
 	}
