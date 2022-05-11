@@ -49,7 +49,7 @@ public class Baralho {
 								cartas.add(new Carta((short) 13, (short) 0, "PAUS", 'K', lit, lif, false));
 								cartas.add(new Carta((short) 13, (short) 0, "COPAS", 'K', lit, lif, false));
 								cartas.add(new Carta((short) 13, (short) 0, "OURO", 'K', lit, lif, false));
-							}
+							} 
 						}
 					}
 				}
