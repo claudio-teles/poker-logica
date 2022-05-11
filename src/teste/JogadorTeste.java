@@ -56,7 +56,7 @@ public class JogadorTeste {
 	@Test
 	public void testeDistribuicaoDeCartasDoDealer() {
 		Jogador distribuidor = new Jogador(10, "distribuidor");
-		assertEquals(8, distribuidor.distribuirCartasDaPartida(baralho, jogadores, mesa).size());
+		assertEquals(8, distribuidor.distribuirCartasDoDealer(baralho, jogadores, mesa).size());
 	}
 
 }

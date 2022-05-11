@@ -134,11 +134,7 @@ public class Jogador {
 		this.acaoDoJogador = acaoDoJogador;
 	}
 	
-	public void distribuirCartasDoDealer(List<Jogador> jogagores, Baralho baralho) {
-		
-	}
-	
-	public List<Carta> distribuirCartasDaPartida(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
+	public List<Carta> distribuirCartasDoDealer(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
 		List<Carta> cartasDoDealer = new ArrayList<>();
 		if (!mesa.isDealerDefinido()) {
 			boolean cicloDeContagem = true;
@@ -160,6 +156,10 @@ public class Jogador {
 			mesa.setPodeEmbaralhar(true);
 		}
 		return null;
+	}
+	
+	public void distribuirCartasDaPartida(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
+		
 	}
 	
 	public void apostarSmallBlind() {
