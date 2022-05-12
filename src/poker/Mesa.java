@@ -14,6 +14,8 @@ public class Mesa {
 	private int ocorrenciaDeDistribuicaoDeCartas;
 	private boolean podeEmbaralhar;
 	private boolean dealerDefinido;
+	private boolean smallBlindDefinidoDefinido;
+	private boolean bigBlindDefinido;
 	private boolean blindDefinido;
 	private Ficha blind;
 	private Painel painel;
@@ -85,6 +87,22 @@ public class Mesa {
 
 	public void setBlindDefinido(boolean blindDefinido) {
 		this.blindDefinido = blindDefinido;
+	}
+
+	public boolean isSmallBlindDefinidoDefinido() {
+		return smallBlindDefinidoDefinido;
+	}
+
+	public void setSmallBlindDefinidoDefinido(boolean smallBlindDefinidoDefinido) {
+		this.smallBlindDefinidoDefinido = smallBlindDefinidoDefinido;
+	}
+
+	public boolean isBigBlindDefinido() {
+		return bigBlindDefinido;
+	}
+
+	public void setBigBlindDefinido(boolean bigBlindDefinido) {
+		this.bigBlindDefinido = bigBlindDefinido;
 	}
 
 	public Ficha getBlind() {
@@ -200,9 +218,10 @@ public class Mesa {
 			for (Jogador jogador : jogadores) {
 				for (Ficha ficha : jogador.getFichas()) {
 					somatorio += ficha.getValor();
-					if (somatorio >= 20) {
-						jogadoresAptos.add(jogador);
-					}
+				}
+				if (somatorio >= 20) {
+					jogadoresAptos.add(jogador);
+					if (jogadoresAptos.size() == jogadores.size()) break;
 				}
 				somatorio = 0;
 			}
@@ -231,13 +250,45 @@ public class Mesa {
 			}
 			
 			jogadorComCartaDeMaiorValor = m.get(maiorValor(listaDeNumeros));
+			jogadorComCartaDeMaiorValor.setVezDeSerDealer(true);
+			
+			int indiceDealer = jogadorComCartaDeMaiorValor.getIndice();
+			int indiceSmallBlind = 0;
+			int indiceBigBlind = 0;
+			
+			if (indiceDealer < (jogadoresAptos.size() - 1)) {
+				indiceSmallBlind = indiceDealer + 1;
+			}
+			
+			if (indiceDealer < (jogadoresAptos.size() - 2)) {
+				indiceBigBlind = indiceDealer + 2;
+			}
+			
+			if (indiceDealer == (jogadoresAptos.size())) {
+				indiceSmallBlind = 1;
+				indiceBigBlind = 2;
+			}
+			analizarVezDeApostar(jogadoresAptos, indiceSmallBlind, indiceBigBlind);
+			
 			this.dealerDefinido = true;
-							
 		} else {
 			smallBlindApostado = false;
 			return null;
 		}
 		return jogadorComCartaDeMaiorValor;
+	}
+
+	private void analizarVezDeApostar(List<Jogador> jogadoresAptos, int indiceSmallBlind, int indiceBigBlind) {
+		jogadoresAptos.stream().filter(
+				jogador -> (jogador.getIndice() == indiceSmallBlind || jogador.getIndice() == indiceBigBlind))
+				.forEach(jogador -> {
+					if (jogador.getIndice() == indiceSmallBlind) {
+						jogador.setVezDeSerBigBlind(true);
+					}
+					if (jogador.getIndice() == indiceBigBlind) {
+						jogador.setVezDeSerBigBlind(true);
+					}
+				});
 	}
 	
 	public int maiorValor(List<Integer> listaDeNumeros) {

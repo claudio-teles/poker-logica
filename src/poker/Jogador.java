@@ -20,6 +20,10 @@ public class Jogador {
 	private List<Ficha> fichasDeApostaRodada;
 	private boolean visivel;
 	private AcaoDoJogador acaoDoJogador;
+	private List<Ficha> valorDaUltimaPosta;
+	private boolean vezDeSerDealer = false;
+	private boolean vezDeSerSmallBlind = false;
+	private boolean vezDeSerBigBlind = false;
 	
 	public Jogador() {
 		super();
@@ -141,7 +145,39 @@ public class Jogador {
 	public void setAcaoDoJogador(AcaoDoJogador acaoDoJogador) {
 		this.acaoDoJogador = acaoDoJogador;
 	}
-	
+
+	public List<Ficha> getValorDaUltimaPosta() {
+		return valorDaUltimaPosta;
+	}
+
+	public void setValorDaUltimaPosta(List<Ficha> valorDaUltimaPosta) {
+		this.valorDaUltimaPosta = valorDaUltimaPosta;
+	}
+
+	public boolean isVezDeSerDealer() {
+		return vezDeSerDealer;
+	}
+
+	public void setVezDeSerDealer(boolean vezDeSerDealer) {
+		this.vezDeSerDealer = vezDeSerDealer;
+	}
+
+	public boolean isVezDeSerSmallBlind() {
+		return vezDeSerSmallBlind;
+	}
+
+	public void setVezDeSerSmallBlind(boolean vezDeSerSmallBlind) {
+		this.vezDeSerSmallBlind = vezDeSerSmallBlind;
+	}
+
+	public boolean isVezDeSerBigBlind() {
+		return vezDeSerBigBlind;
+	}
+
+	public void setVezDeSerBigBlind(boolean vezDeSerBigBlind) {
+		this.vezDeSerBigBlind = vezDeSerBigBlind;
+	}
+
 	public List<Carta> distribuirCartasDoDealer(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
 		List<Carta> cartasDoDealer = new ArrayList<>();
 		if (!mesa.isDealerDefinido()) {
@@ -170,8 +206,22 @@ public class Jogador {
 		
 	}
 	
-	public void apostarSmallBlind() {
-		
+	public void apostarSmallBlind(Ficha blind, Mesa mesa) {
+		if (
+				mesa.isBlindDefinido() && mesa.isSmallBlindApostado() == true && mesa.isBigBlindDefinido() == true &&
+				mesa.isSmallBlindApostado() == false && mesa.isIntencaoEscolherDealer() == false
+			) {
+				Ficha metadeDoBlind = new Ficha((blind.getValor() / 2), blind.getCor(), blind.getLocalDaImagem());
+				this.fichasDeApostaRodada.add(metadeDoBlind);
+		} else {
+			int indiceDaUltimaPartida = mesa.getPainel().getPartidas().size() - 1;
+			Partida ultimaPartida = mesa.getPainel().getPartidas().get(indiceDaUltimaPartida);
+			Rodada ultimaRodada = ultimaPartida.getRodadas().get(ultimaPartida.getRodadas().size() - 1);
+			if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.PRE_FLOP) {
+				valorDaUltimaPosta = new ArrayList<>();
+				//Adicionar metade da blind em valorDaUltimaPosta
+			}
+		}
 	}
 	
 	public void apostarBigBlind(List<Ficha> fichas) {
