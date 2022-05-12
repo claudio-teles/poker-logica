@@ -167,5 +167,10 @@ public class MesaTeste {
 		mesa.setBlind(new Ficha(25, "verde", "li1"));
 		assertEquals(25, mesa.getBlind().getValor());
 	}
+	
+	@Test
+	public void testeEmbaralharCartasDoBaralho() {
+		jogadores.get(0).embaralharCartas(new Baralho());
+	}
 
 }

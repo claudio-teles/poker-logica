@@ -1,6 +1,7 @@
 package poker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -146,7 +147,7 @@ public class Jogador {
 		if (!mesa.isDealerDefinido()) {
 			boolean cicloDeContagem = true;
 			while (cicloDeContagem) {
-				Carta cartaSelecionda = baralho.getCartas().get(new Random().nextInt((51)+1));
+				Carta cartaSelecionda = baralho.getCartas().get(new Random().nextInt((52)));
 				if (!cartasDoDealer.contains(cartaSelecionda)) {
 					cartasDoDealer.add(cartaSelecionda);
 					if (cartasDoDealer.size() == jogadores.size()) {
@@ -179,7 +180,20 @@ public class Jogador {
 
 	
 	public void embaralharCartas(Baralho baralho) {
+		Carta[] cartas = new Carta[52];
+		int numeroDeCartasRestantes = 52;
 		
+		int i = 0;
+		while (numeroDeCartasRestantes != 0) {
+			cartas[i] = baralho.getCartas().get(new Random().nextInt((numeroDeCartasRestantes)));
+			baralho.getCartas().remove(cartas[i]);
+			i++;
+			numeroDeCartasRestantes--;
+		}
+		
+		Baralho baralhoComCartasAleatorias = new Baralho();
+		List<Carta> cartasAleatorias = Arrays.asList(cartas);
+		baralhoComCartasAleatorias.setCartas(cartasAleatorias);
 	}
 	
 	public void cobrir(int valor) {

@@ -11,6 +11,10 @@ public class Baralho {
 		return cartas;
 	}
 
+	public void setCartas(List<Carta> cartas) {
+		this.cartas = cartas;
+	}
+
 	public Baralho() {
 		super();
 		cartas = new ArrayList<>();
