@@ -180,7 +180,11 @@ public class Mesa {
 	}
 	
 	public void definirBlind(Ficha fichaDesejada) {
-		
+		if (this.dealerDefinido) {
+			this.setBlind(fichaDesejada);
+			this.blindDefinido = true;
+			this.podeEmbaralhar = true;
+		}
 	}
 	
 	@SuppressWarnings("unlikely-arg-type")
@@ -216,7 +220,7 @@ public class Mesa {
 			}
 			
 			for (int i = 0; i < novasCartas.size(); i++) {
-				Jogador j = jogadores.get(i);
+				Jogador j = jogadoresAptos.get(i);
 				Carta c = cartasDoDealer.getCartasDoDealer().get(i);
 				
 				if (!listaDeNumeros.contains(c.getValor())) {
@@ -225,6 +229,7 @@ public class Mesa {
 			}
 			
 			jogadorComCartaDeMaiorValor = m.get(maiorValor(listaDeNumeros));
+			this.dealerDefinido = true;
 							
 		} else {
 			smallBlindApostado = false;

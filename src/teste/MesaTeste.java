@@ -160,5 +160,12 @@ public class MesaTeste {
 		cartasDoDealer.setCartasDoDealer(j.distribuirCartasDoDealer(new Baralho(), jogadores, mesa));
 		assertNotNull(mesa.definirDealer(jogadores, cartasDoDealer));
 	}
+	
+	@Test
+	public void testeBlindDefinido() {
+		mesa.setDealerDefinido(true);
+		mesa.setBlind(new Ficha(25, "verde", "li1"));
+		assertEquals(25, mesa.getBlind().getValor());
+	}
 
 }
