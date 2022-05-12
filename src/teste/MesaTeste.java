@@ -164,8 +164,12 @@ public class MesaTeste {
 	@Test
 	public void testeBlindDefinido() {
 		mesa.setDealerDefinido(true);
-		mesa.setBlind(new Ficha(25, "verde", "li1"));
-		assertEquals(25, mesa.getBlind().getValor());
+		try {
+			mesa.definirBlind(new Ficha(25, "verde", "li1"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertNotNull(mesa.getBlind());
 	}
 	
 	@Test

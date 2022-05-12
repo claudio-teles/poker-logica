@@ -179,11 +179,13 @@ public class Mesa {
 		return fichas;
 	}
 	
-	public void definirBlind(Ficha fichaDesejada) {
-		if (this.dealerDefinido) {
+	public void definirBlind(Ficha fichaDesejada) throws Exception {
+		if (this.dealerDefinido && fichaDesejada.getValor() >= 2) {
 			this.setBlind(fichaDesejada);
 			this.blindDefinido = true;
 			this.podeEmbaralhar = true;
+		} else {
+			throw new Exception("Quantidade insuficiente de fichas, insira um valor maior ou igual a 2.");
 		}
 	}
 	
