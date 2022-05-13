@@ -20,7 +20,7 @@ public class Jogador {
 	private List<Ficha> fichasDeApostaRodada;
 	private boolean visivel;
 	private AcaoDoJogador acaoDoJogador;
-	private List<Ficha> valorDaUltimaPosta;
+	private List<Ficha> valorDaUltimaAposta;
 	private boolean vezDeSerDealer = false;
 	private boolean vezDeSerSmallBlind = false;
 	private boolean vezDeSerBigBlind = false;
@@ -146,12 +146,12 @@ public class Jogador {
 		this.acaoDoJogador = acaoDoJogador;
 	}
 
-	public List<Ficha> getValorDaUltimaPosta() {
-		return valorDaUltimaPosta;
+	public List<Ficha> getValorDaUltimaAposta() {
+		return valorDaUltimaAposta;
 	}
 
-	public void setValorDaUltimaPosta(List<Ficha> valorDaUltimaPosta) {
-		this.valorDaUltimaPosta = valorDaUltimaPosta;
+	public void setValorDaUltimaAposta(List<Ficha> valorDaUltimaAposta) {
+		this.valorDaUltimaAposta = valorDaUltimaAposta;
 	}
 
 	public boolean isVezDeSerDealer() {
@@ -212,15 +212,47 @@ public class Jogador {
 				mesa.isSmallBlindApostado() == false && mesa.isIntencaoEscolherDealer() == false
 			) {
 				Ficha metadeDoBlind = new Ficha((blind.getValor() / 2), blind.getCor(), blind.getLocalDaImagem());
-				this.fichasDeApostaRodada.add(metadeDoBlind);
-		} else {
-			int indiceDaUltimaPartida = mesa.getPainel().getPartidas().size() - 1;
-			Partida ultimaPartida = mesa.getPainel().getPartidas().get(indiceDaUltimaPartida);
-			Rodada ultimaRodada = ultimaPartida.getRodadas().get(ultimaPartida.getRodadas().size() - 1);
-			if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.PRE_FLOP) {
-				valorDaUltimaPosta = new ArrayList<>();
+				
+				int indiceDaUltimaPartida = mesa.getPainel().getPartidas().size() - 1;
+				Partida ultimaPartida = mesa.getPainel().getPartidas().get(indiceDaUltimaPartida);
+				Rodada ultimaRodada = ultimaPartida.getRodadas().get(ultimaPartida.getRodadas().size() - 1);
+				
+				valorDaUltimaAposta = new ArrayList<>();
+				valorDaUltimaAposta.clear();
+				valorDaUltimaAposta.add(metadeDoBlind);
 				//Adicionar metade da blind em valorDaUltimaPosta
-			}
+				this.fichasDeApostaRodada.add(metadeDoBlind);
+				// fazer algum tipo de aposta, pedir mesa ou sair
+				
+				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.PRE_FLOP) {
+					valorDaUltimaAposta = new ArrayList<>();
+					valorDaUltimaAposta.clear();
+					valorDaUltimaAposta.add(metadeDoBlind);
+					//Adicionar metade da blind em valorDaUltimaPosta
+					this.fichasDeApostaRodada.add(metadeDoBlind);
+				}
+				
+				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.FLOP) {
+					// fazer algum tipo de aposta, pedir mesa ou sair
+					
+				}
+				
+				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.TURN) {
+					// fazer algum tipo de aposta, pedir mesa ou sair
+					
+				}
+				
+				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.RIVER) {
+					// fazer algum tipo de aposta, pedir mesa ou sair
+					
+				}
+				
+				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.SHOWDOWN) {
+					// fazer algum tipo de aposta, pedir mesa ou sair
+					
+				}
+		} else {
+			
 		}
 	}
 	
