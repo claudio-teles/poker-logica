@@ -1,6 +1,7 @@
 package teste;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import poker.Baralho;
+import poker.Ficha;
 import poker.Jogador;
 import poker.Mesa;
 
@@ -57,6 +59,51 @@ public class JogadorTeste {
 	public void testeDistribuicaoDeCartasDoDealer() {
 		Jogador distribuidor = new Jogador(10, "distribuidor");
 		assertEquals(8, distribuidor.distribuirCartasDoDealer(baralho, jogadores, mesa).size());
+	}
+	
+	@Test
+	public void testeApostarSmallBlind() {
+		List<Ficha> lista = new ArrayList<>();
+		lista.add(new Ficha(1, "branco", "li1"));
+		lista.add(new Ficha(1, "branco", "li2"));
+		
+		mesa.setBlind(lista);
+		mesa.setBlindDefinido(true);
+		mesa.setSmallBlindDefinidoDefinido(true);
+		mesa.setBigBlindDefinido(true);
+		mesa.setSmallBlindApostado(false);
+		mesa.setIntencaoEscolherDealer(false);
+		
+		Ficha ficha1 = new Ficha(5, "vermelho", "li1");
+		Ficha ficha2 = new Ficha(1, "branco", "li2");
+		
+		List<Ficha> blind = new ArrayList<>();
+		blind.add(ficha1);
+		blind.add(ficha2);
+		
+		Jogador jogador = new Jogador(1, "j1");
+		List<Ficha> fichas = jogador.apostarSmallBlind(blind, mesa);
+		
+		boolean testeFicha = (fichas.get(0).getValor() == 3 && fichas.get(0).getCor().equals("vermelho"));
+		assertTrue(testeFicha);
+	}
+	
+	@Test
+	public void testeApostarBigBlind() {
+		mesa.setBlindDefinido(true);
+		mesa.setSmallBlindDefinidoDefinido(true);
+		mesa.setBigBlindDefinido(true);
+		mesa.setSmallBlindApostado(false);
+		mesa.setIntencaoEscolherDealer(false);
+		
+		Ficha ficha1 = new Ficha(1, "branco", "li1");
+		Ficha ficha2 = new Ficha(1, "branco", "li2");
+		
+		List<Ficha> blind = new ArrayList<>();
+		blind.add(ficha1);
+		blind.add(ficha2);
+		
+		assertEquals(2, blind.size());
 	}
 
 }

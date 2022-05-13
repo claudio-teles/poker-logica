@@ -17,11 +17,12 @@ public class Mesa {
 	private boolean smallBlindDefinidoDefinido;
 	private boolean bigBlindDefinido;
 	private boolean blindDefinido;
-	private Ficha blind;
+	private List<Ficha> blind;
 	private Painel painel;
 	private boolean rodadaEmAndamento;
 	private List<Jogador> jogadoresDoTorneio;
-	private boolean smallBlindApostado;
+	private boolean smallBlindApostado = false;
+	private boolean bigBlindApostado = false;
 
 	public Mesa() {}
 	
@@ -105,11 +106,11 @@ public class Mesa {
 		this.bigBlindDefinido = bigBlindDefinido;
 	}
 
-	public Ficha getBlind() {
+	public List<Ficha> getBlind() {
 		return blind;
 	}
 
-	public void setBlind(Ficha blind) {
+	public void setBlind(List<Ficha> blind) {
 		this.blind = blind;
 	}
 
@@ -143,6 +144,14 @@ public class Mesa {
 
 	public void setSmallBlindApostado(boolean smallBlindApostado) {
 		this.smallBlindApostado = smallBlindApostado;
+	}
+
+	public boolean isBigBlindApostado() {
+		return bigBlindApostado;
+	}
+
+	public void setBigBlindApostado(boolean bigBlindApostado) {
+		this.bigBlindApostado = bigBlindApostado;
 	}
 
 	public List<Ficha> entregarStack(int valorDaStack) throws Exception {
@@ -185,10 +194,16 @@ public class Mesa {
 					sobrou -= 100;
 				}
 			}
-			if (sobrou > 1000) {
+			if (sobrou > 1000 && sobrou < 2000) {
 				for (int i = 1; i <= 2; i++) {
 					fichas.add(new Ficha(500, "roxo", null));// 2 x 500
 					sobrou -= 500;
+				}
+			}
+			if (sobrou > 2000) {
+				for (int i = 1; i <= 2; i++) {
+					fichas.add(new Ficha(1000, "castanho", null));// 2 x 1000
+					sobrou -= 1000;
 				}
 			}
 		} else {
@@ -197,8 +212,12 @@ public class Mesa {
 		return fichas;
 	}
 	
-	public void definirBlind(Ficha fichaDesejada) throws Exception {
-		if (this.dealerDefinido && fichaDesejada.getValor() >= 2) {
+	public void definirBlind(List<Ficha> fichaDesejada) throws Exception {
+		int somatorio = 0;
+		for (Ficha ficha : fichaDesejada) {
+			somatorio += ficha.getValor();
+		}
+		if (this.dealerDefinido && somatorio >= 2) {
 			this.setBlind(fichaDesejada);
 			this.blindDefinido = true;
 			this.podeEmbaralhar = true;

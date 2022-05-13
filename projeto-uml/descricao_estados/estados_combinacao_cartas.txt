@@ -1,0 +1,66 @@
+21:30:30 - SHOWDOWN
+
+Comparando os naipes da mão do ja2 tem q,k,a faltando j e 10 de espadas para royal straight flush, comparando os valores o ja2 tem kc,ks e ao,ap; comparando o par de a é maior que o k.
+
+Comparando os valores da mão do ja3 tem ac,ao,ap, as uma quadra.
+
+Comparando os valores da mão do jh1 tem 10s,js,qs,ks,as um royal straight flush
+
+Comparando jh1, ja2, ja3 o rsf(12) ganha da quadra(8) e ganha do par(2).
+
+As cartas da mão não estão viradas antes do showndown, no showdown estão viradas.
+Os valores da mão podem estar em sequência ou não.
+Os naipes da mão podem ser iguais ou não, quando são iguais os valores são diferentes 
+e quando são diferentes os valores são iguais; ainda quando os naipes são iguais,
+os valores podem ser diferentes em sequência ou não.
+A diferença entre o maior e menor valor de uma sequência de valor é: n cartas - 1; 5 cartas - 1 = 4; 14 - 10 = 4.
+Quando a combinação é de par da mão, os valores são iguais e os naipes sempre direntes.
+Quando a combinação de trinca de cartas da mesa, os 3 valores são iguais e os naipes sempre difentes.
+Na combinação de quandra, os 4 valores sempre são iguais e os naipes sempre difentes.
+Outro tipo de combinação de cartas é quando os valores são sempre todos difentes, fora de sequência e com naipes iguais.
+Quando não há combinação nenhuma de cartas então o valor mais alta da combinação de cartas é que levado em conta.
+
+Inventário de estados de cartas.
+
+comparando;
+comparado;
+tem esses valores;
+valores faltantes;
+com valores iguais;
+com valores difentes;
+com naipes iguais;
+com naipes diferentes;
+com distância 1 <= 4;
+com distância >= 4;
+valores em sequência;
+valores fora de sequência;
+comecando com valores;
+terminando com valores;
+com face virada;
+com face não virada;
+estão na mão;
+estão na mesma;
+com valor mais alto;
+com quantidade;
+
+
+com probabilidade[parcial/total]
+
+alta[valores,naipes,indice]
+par[valores,naipes,indice]
+pares[valores,naipes,indice]
+trinca[valores,naipes,indice]
+seq[valores,naipes,indice]
+flush[valores,naipes,indice]
+house[valores,naipes,indice]
+quadra[valores,naipes,indice]
+s_flush[valores,naipes,indice]
+r_s_f[valores,naipes,indice]
+
+estado_mao;
+estado_mesa;
+
+
+
+
+

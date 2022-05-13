@@ -165,7 +165,9 @@ public class MesaTeste {
 	public void testeBlindDefinido() {
 		mesa.setDealerDefinido(true);
 		try {
-			mesa.definirBlind(new Ficha(25, "verde", "li1"));
+			List<Ficha> listaDeFichas = new ArrayList<>();
+			listaDeFichas.add(new Ficha(25, "verde", "li1"));
+			mesa.definirBlind(listaDeFichas);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

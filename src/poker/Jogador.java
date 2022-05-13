@@ -206,58 +206,74 @@ public class Jogador {
 		
 	}
 	
-	public void apostarSmallBlind(Ficha blind, Mesa mesa) {
+	public List<Ficha> apostarSmallBlind(List<Ficha> blind, Mesa mesa) {
 		if (
-				mesa.isBlindDefinido() && mesa.isSmallBlindApostado() == true && mesa.isBigBlindDefinido() == true &&
+				mesa.isBlindDefinido() && mesa.isSmallBlindDefinidoDefinido() && mesa.isBigBlindDefinido() &&
 				mesa.isSmallBlindApostado() == false && mesa.isIntencaoEscolherDealer() == false
 			) {
-				Ficha metadeDoBlind = new Ficha((blind.getValor() / 2), blind.getCor(), blind.getLocalDaImagem());
-				
-				int indiceDaUltimaPartida = mesa.getPainel().getPartidas().size() - 1;
-				Partida ultimaPartida = mesa.getPainel().getPartidas().get(indiceDaUltimaPartida);
-				Rodada ultimaRodada = ultimaPartida.getRodadas().get(ultimaPartida.getRodadas().size() - 1);
-				
-				valorDaUltimaAposta = new ArrayList<>();
-				valorDaUltimaAposta.clear();
-				valorDaUltimaAposta.add(metadeDoBlind);
-				//Adicionar metade da blind em valorDaUltimaPosta
-				this.fichasDeApostaRodada.add(metadeDoBlind);
-				// fazer algum tipo de aposta, pedir mesa ou sair
-				
-				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.PRE_FLOP) {
-					valorDaUltimaAposta = new ArrayList<>();
-					valorDaUltimaAposta.clear();
-					valorDaUltimaAposta.add(metadeDoBlind);
-					//Adicionar metade da blind em valorDaUltimaPosta
-					this.fichasDeApostaRodada.add(metadeDoBlind);
-				}
-				
-				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.FLOP) {
-					// fazer algum tipo de aposta, pedir mesa ou sair
-					
-				}
-				
-				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.TURN) {
-					// fazer algum tipo de aposta, pedir mesa ou sair
-					
-				}
-				
-				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.RIVER) {
-					// fazer algum tipo de aposta, pedir mesa ou sair
-					
-				}
-				
-				if (ultimaRodada.getTipoDeRodada() == TipoDeRodada.SHOWDOWN) {
-					// fazer algum tipo de aposta, pedir mesa ou sair
-					
-				}
-		} else {
 			
+			String localDaImagem = "lif1";
+			String cor = "";
+			int somatorio = 0;
+			for (Ficha ficha : blind) {
+				somatorio += ficha.getValor();
+			}
+			
+			int numeroDaCor = ((somatorio >= 1 && somatorio < 5) ? 1 : (somatorio >= 5 && somatorio < 10) ? 2 : (somatorio >= 10 && somatorio < 20) ? 3 : (somatorio >= 20 && somatorio < 25) ? 4 : (somatorio >= 25 && somatorio < 100) ? 5 : (somatorio >= 100 && somatorio < 500) ? 6 : (somatorio >= 500 && somatorio < 1000) ? 7 : 8);
+			
+			switch (numeroDaCor) {
+			case 2:
+				cor = "vermelho";
+				break;
+				
+			case 3:
+				cor = "laranja";
+				break;
+				
+			case 4:
+				cor = "amarelo";
+				break;
+				
+			case 5:
+				cor = "verde";
+				break;
+				
+			case 6:
+				cor = "preto";
+				break;
+				
+			case 7:
+				cor = "roxo";
+				break;
+				
+			case 8:
+				cor = "castanho";
+				break;
+
+			default:
+				cor = "branco";
+				break;
+			}
+			
+			Ficha metadeDoBlind = new Ficha((somatorio / 2), cor, localDaImagem);
+			
+			valorDaUltimaAposta = new ArrayList<>();
+			valorDaUltimaAposta.clear();
+			valorDaUltimaAposta.add(metadeDoBlind);
+			mesa.setSmallBlindApostado(true);
 		}
+		return valorDaUltimaAposta;
 	}
 	
-	public void apostarBigBlind(List<Ficha> fichas) {
-		
+	public List<Ficha> apostarBigBlind(List<Ficha> fichas, Mesa mesa) {
+		if (mesa.isSmallBlindApostado()) {
+			valorDaUltimaAposta = new ArrayList<>();
+			valorDaUltimaAposta.clear();
+			fichas.forEach(ficha -> valorDaUltimaAposta.add(ficha));
+			mesa.setBigBlindApostado(true);
+			return valorDaUltimaAposta;
+		}
+		return null;
 	}
 
 	
