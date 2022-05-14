@@ -1,12 +1,17 @@
 package poker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mao {
 	
 	private List<Carta> cartas;
 
-	public Mao() {}
+	public Mao() {
+		cartas = new ArrayList<>();
+		cartas.add(new Carta());
+		cartas.add(new Carta());
+	}
 
 	public List<Carta> getCartas() {
 		return cartas;

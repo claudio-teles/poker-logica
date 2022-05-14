@@ -14,7 +14,7 @@ public class Jogador {
 	private int stack;
 	private int valorDaFicha;
 	private List<Ficha> fichas;
-	private Mao mao;
+	private Mao mao = new Mao();
 	private boolean vezDeJogar;
 	private boolean vencedor;
 	private List<Ficha> fichasDeApostaRodada;
@@ -202,8 +202,38 @@ public class Jogador {
 		return null;
 	}
 	
-	public void distribuirCartasDaPartida(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
-		
+	public List<Jogador> distribuirCartasDaPartida(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
+		if (mesa.isBigBlindApostado()) {
+			Jogador dealer = new Jogador();
+			for (Jogador jogador : jogadores) {
+				if (jogador.isVezDeSerDealer()) {
+					dealer = jogador;
+				}
+			}
+			
+			List<Carta> cartasDoBaralhoMisturadas = dealer.embaralharCartas(baralho);
+			
+			for (int i = 0; i < jogadores.size(); i++) {
+				Jogador jogador = jogadores.get(i);
+				Carta primeiraCarta = cartasDoBaralhoMisturadas.get(i);
+				jogador.getMao().getCartas().set(0, primeiraCarta);
+				
+				cartasDoBaralhoMisturadas.set(i, null);
+				baralho.setCartas(cartasDoBaralhoMisturadas);
+			}
+			
+			for (int i = jogadores.size(); i < (2 * jogadores.size()); i++) {
+				Jogador jogador = jogadores.get(i - jogadores.size());
+				Carta primeiraCarta = cartasDoBaralhoMisturadas.get(i);
+				jogador.getMao().getCartas().set(1, primeiraCarta);
+				
+				cartasDoBaralhoMisturadas.set(i, null);
+				baralho.setCartas(cartasDoBaralhoMisturadas);
+			}
+			
+			return jogadores;
+		}
+		return null;
 	}
 	
 	public List<Ficha> apostarSmallBlind(List<Ficha> blind, Mesa mesa) {
@@ -277,7 +307,7 @@ public class Jogador {
 	}
 
 	
-	public void embaralharCartas(Baralho baralho) {
+	public List<Carta> embaralharCartas(Baralho baralho) {
 		Carta[] cartas = new Carta[52];
 		int numeroDeCartasRestantes = 52;
 		
@@ -292,6 +322,7 @@ public class Jogador {
 		Baralho baralhoComCartasAleatorias = new Baralho();
 		List<Carta> cartasAleatorias = Arrays.asList(cartas);
 		baralhoComCartasAleatorias.setCartas(cartasAleatorias);
+		return cartasAleatorias;
 	}
 	
 	public void cobrir(int valor) {

@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import poker.Baralho;
+import poker.Carta;
 import poker.Ficha;
 import poker.Jogador;
 import poker.Mesa;
@@ -104,6 +105,25 @@ public class JogadorTeste {
 		blind.add(ficha2);
 		
 		assertEquals(2, blind.size());
+	}
+	
+	@Test
+	public void testeDistribuirCartasDaPartida() {
+		mesa.setBigBlindApostado(true);
+		
+		Jogador dealer = new Jogador(10, "j10");
+		dealer.setVezDeSerDealer(true);
+		
+		dealer.distribuirCartasDaPartida(baralho, jogadores, mesa);
+		
+		int quantidadeDeCartasNulas = 0;
+		for (Carta carta : baralho.getCartas()) {
+			if (carta == null) {
+				quantidadeDeCartasNulas++;
+			}
+		}
+		
+		assertEquals(16, quantidadeDeCartasNulas);
 	}
 
 }
