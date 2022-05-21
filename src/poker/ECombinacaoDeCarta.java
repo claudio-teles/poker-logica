@@ -1,6 +1,6 @@
 package poker;
 
-public enum CombinacaoDeCarta {
+public enum ECombinacaoDeCarta {
 	
 	CARTA_MAIS_ALTA, PAR, DOIS_PARES, TRINCA, SEQUENCIA, FLUSH, FULL_HOUSE, QUADRA, STRAIGHT_FLUSH, ROYAL_STRAIGHT_FLUSH
 

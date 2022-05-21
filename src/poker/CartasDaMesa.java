@@ -1,17 +1,26 @@
 package poker;
 
+import java.util.List;
+
 public class CartasDaMesa {
 	
-	private Mao mao;
+	private List<Carta> cartas;
 
-	public CartasDaMesa() {}
-
-	public Mao getMao() {
-		return mao;
+	public CartasDaMesa() {
+		super();
 	}
 
-	public void setMao(Mao mao) {
-		this.mao = mao;
+	public CartasDaMesa(List<Carta> cartas) {
+		super();
+		this.cartas = cartas;
+	}
+
+	public List<Carta> getCartas() {
+		return cartas;
+	}
+
+	public void setCartas(List<Carta> cartas) {
+		this.cartas = cartas;
 	}
 
 }
