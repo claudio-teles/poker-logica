@@ -53,6 +53,7 @@ public class MesaTeste {
 		} catch (Exception e1) {
 			
 		}
+		mesa.setJogadoresDoTorneio(jogadores);
 		mesaComErro = new Mesa();
 		
 		
@@ -149,7 +150,7 @@ public class MesaTeste {
 		Jogador j = new Jogador(15, "j15");
 		CartasDoDealer cartasDoDealer = new CartasDoDealer();
 		cartasDoDealer.setCartasDoDealer(j.distribuirCartasDoDealer(new Baralho(), jogadores, mesa));
-		assertNull(mesa.definirDealer(jogadores, cartasDoDealer));
+		assertNull(mesa.definirDealer(cartasDoDealer));
 	}
 	
 	@Test
@@ -158,7 +159,7 @@ public class MesaTeste {
 		Jogador j = new Jogador(15, "j15");
 		CartasDoDealer cartasDoDealer = new CartasDoDealer();
 		cartasDoDealer.setCartasDoDealer(j.distribuirCartasDoDealer(new Baralho(), jogadores, mesa));
-		assertNotNull(mesa.definirDealer(jogadores, cartasDoDealer));
+		assertNotNull(mesa.definirDealer(cartasDoDealer));
 	}
 	
 	@Test

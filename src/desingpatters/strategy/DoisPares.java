@@ -18,23 +18,30 @@ public class DoisPares implements CombinacaoDeCartas {
 		List<Carta> cartasDoJogador = new ArrayList<>();
 		cartasDoJogador.addAll(jogador.getMao().getCartas());
 
+		
 		List<Carta> cartasMesa = new ArrayList<>();
 		cartasMesa.addAll(cartasDaMesa.getCartas());
 
+		List<Carta> cartasDoJogadorClone = new ArrayList<>();
+		cartasDoJogadorClone.addAll(cartasDoJogador);
+		
+		List<Carta> cartasMesaClone = new ArrayList<>();
+		cartasMesaClone.addAll(cartasMesa);
+		
 		ResultadoDeAnalise resultado1 = new CartasValoresIguaisNaipesDiferentes()
 				.encontrarMelhorCombinacaoDeCartas(jogador, cartasDaMesa, (quantidadeCartasSaida - 2));
 
 		for (Carta carta : resultado1.getCartas()) {
-			if (cartasDoJogador.contains(carta)) {
-				cartasDoJogador.remove(carta);
+			if (cartasDoJogadorClone.contains(carta)) {
+				cartasDoJogadorClone.remove(carta);
 			}
-			if (cartasMesa.contains(carta)) {
-				cartasMesa.remove(carta);
+			if (cartasMesaClone.contains(carta)) {
+				cartasMesaClone.remove(carta);
 			}
 		}
 
-		jogador.getMao().setCartas(cartasDoJogador);
-		cartasDaMesa.setCartas(cartasMesa);
+		jogador.getMao().setCartas(cartasDoJogadorClone);
+		cartasDaMesa.setCartas(cartasMesaClone);
 
 		ResultadoDeAnalise resultado2 = new CartasValoresIguaisNaipesDiferentes()
 				.encontrarMelhorCombinacaoDeCartas(jogador, cartasDaMesa, (quantidadeCartasSaida - 2));

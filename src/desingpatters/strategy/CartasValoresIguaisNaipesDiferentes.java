@@ -60,17 +60,14 @@ public class CartasValoresIguaisNaipesDiferentes implements CombinacaoDeCartas {
 		int valorRepete4X = 0;// get(4)
 		if (quantidadeCartasSaida == 4) {
 			valorRepete4X = mapaFrequenciaValorCarta.get(4);
-			mapaValorCartaFrequencia.replace(valorRepete4X, 0);
 		}
 		int valorRepete3X = 0;// get(3)
 		if (quantidadeCartasSaida == 3) {
 			valorRepete3X = mapaFrequenciaValorCarta.get(3);
-			mapaValorCartaFrequencia.replace(valorRepete3X, 0);
 		}
 		int valorRepete2X = 0;// get(2)
 		if (quantidadeCartasSaida == 2) {
 			valorRepete2X = mapaFrequenciaValorCarta.get(2);
-			mapaValorCartaFrequencia.replace(valorRepete2X, 0);
 		}
 		
 		for (Carta carta : cartas) {

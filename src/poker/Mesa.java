@@ -2,11 +2,12 @@ package poker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class Mesa {
-	
+
 	private String localimagemPlanoDeFundo;
 	private boolean intencaoEscolherDealer;
 	private boolean vencedor;
@@ -19,13 +20,18 @@ public class Mesa {
 	private boolean blindDefinido;
 	private List<Ficha> blind;
 	private Painel painel;
-	private boolean rodadaEmAndamento;
 	private List<Jogador> jogadoresDoTorneio;
 	private boolean smallBlindApostado = false;
 	private boolean bigBlindApostado = false;
+	private boolean novaPartida;
+	private boolean partidaEmAndamento;
+	private boolean rodadaEmAndamento;
+	private int quantidadeDeRodadaDaPartida;
+	private int valorDoTipoDeRodada;
 
-	public Mesa() {}
-	
+	public Mesa() {
+	}
+
 	public String getLocalimagemPlanoDeFundo() {
 		return localimagemPlanoDeFundo;
 	}
@@ -122,14 +128,6 @@ public class Mesa {
 		this.painel = painel;
 	}
 
-	public boolean isRodadaEmAndamento() {
-		return rodadaEmAndamento;
-	}
-
-	public void setRodadaEmAndamento(boolean rodadaEmAndamento) {
-		this.rodadaEmAndamento = rodadaEmAndamento;
-	}
-
 	public List<Jogador> getJogadoresDoTorneio() {
 		return jogadoresDoTorneio;
 	}
@@ -207,11 +205,11 @@ public class Mesa {
 				}
 			}
 		} else {
-			 throw new Exception("O valor da da stack para compra de fichas precisa ser maior que 20.");
+			throw new Exception("O valor da da stack para compra de fichas precisa ser maior que 20.");
 		}
 		return fichas;
 	}
-	
+
 	public void definirBlind(List<Ficha> fichaDesejada) throws Exception {
 		int somatorio = 0;
 		for (Ficha ficha : fichaDesejada) {
@@ -225,70 +223,73 @@ public class Mesa {
 			throw new Exception("Quantidade insuficiente de fichas, insira um valor maior ou igual a 2.");
 		}
 	}
-	
+
 	@SuppressWarnings("unlikely-arg-type")
-	public Jogador definirDealer(List<Jogador> jogadores, CartasDoDealer cartasDoDealer) {
+	public Jogador definirDealer(CartasDoDealer cartasDoDealer) {
 		Jogador jogadorComCartaDeMaiorValor = new Jogador();
-		
+		List<Jogador> jogadores = new ArrayList<>();
+		jogadores.addAll(getJogadoresDoTorneio());
+
 		if (intencaoEscolherDealer) {
 			int somatorio = 0;
 			List<Jogador> jogadoresAptos = new ArrayList<>();
-			
+
 			for (Jogador jogador : jogadores) {
 				for (Ficha ficha : jogador.getFichas()) {
 					somatorio += ficha.getValor();
 				}
 				if (somatorio >= 20) {
 					jogadoresAptos.add(jogador);
-					if (jogadoresAptos.size() == jogadores.size()) break;
+					if (jogadoresAptos.size() == jogadores.size())
+						break;
 				}
 				somatorio = 0;
 			}
-			
+
 			int quantidadeDeJogadoresPraRetirar = (jogadores.size() - jogadoresAptos.size());
-			
+
 			List<Integer> listaDeNumeros = new ArrayList<>();
 			Map<Integer, Jogador> m = new HashMap<>();
-			
+
 			List<Carta> novasCartas = cartasDoDealer.getCartasDoDealer();
 			for (int i = 0; i < quantidadeDeJogadoresPraRetirar; i++) {
 				novasCartas.remove(novasCartas.size() - 1);
 			}
-			
+
 			for (Carta carta : novasCartas) {
 				listaDeNumeros.add((int) carta.getValor());
 			}
-			
+
 			for (int i = 0; i < novasCartas.size(); i++) {
 				Jogador j = jogadoresAptos.get(i);
 				Carta c = cartasDoDealer.getCartasDoDealer().get(i);
-				
+
 				if (!listaDeNumeros.contains(c.getValor())) {
 					m.put((int) c.getValor(), j);
 				}
 			}
-			
+
 			jogadorComCartaDeMaiorValor = m.get(maiorValor(listaDeNumeros));
 			jogadorComCartaDeMaiorValor.setVezDeSerDealer(true);
-			
+
 			int indiceDealer = jogadorComCartaDeMaiorValor.getIndice();
 			int indiceSmallBlind = 0;
 			int indiceBigBlind = 0;
-			
+
 			if (indiceDealer < (jogadoresAptos.size() - 1)) {
 				indiceSmallBlind = indiceDealer + 1;
 			}
-			
+
 			if (indiceDealer < (jogadoresAptos.size() - 2)) {
 				indiceBigBlind = indiceDealer + 2;
 			}
-			
+
 			if (indiceDealer == (jogadoresAptos.size())) {
 				indiceSmallBlind = 1;
 				indiceBigBlind = 2;
 			}
 			analizarVezDeApostar(jogadoresAptos, indiceSmallBlind, indiceBigBlind);
-			
+
 			this.dealerDefinido = true;
 		} else {
 			smallBlindApostado = false;
@@ -298,8 +299,8 @@ public class Mesa {
 	}
 
 	private void analizarVezDeApostar(List<Jogador> jogadoresAptos, int indiceSmallBlind, int indiceBigBlind) {
-		jogadoresAptos.stream().filter(
-				jogador -> (jogador.getIndice() == indiceSmallBlind || jogador.getIndice() == indiceBigBlind))
+		jogadoresAptos.stream()
+				.filter(jogador -> (jogador.getIndice() == indiceSmallBlind || jogador.getIndice() == indiceBigBlind))
 				.forEach(jogador -> {
 					if (jogador.getIndice() == indiceSmallBlind) {
 						jogador.setVezDeSerBigBlind(true);
@@ -309,7 +310,7 @@ public class Mesa {
 					}
 				});
 	}
-	
+
 	public int maiorValor(List<Integer> listaDeNumeros) {
 		int numero = 0;
 		for (int i = 0; i < listaDeNumeros.size(); i++) {
@@ -324,47 +325,141 @@ public class Mesa {
 	}
 
 	public void definirQuantidadeDeJogadores(int quantidadeDeJogadores) {
-		
+
 	}
-	
+
 	public void retirarJogadorDaPartida(Jogador jogador, Partida partida) {
-		
+
 	}
-	
+
 	public void iniciarPartida() {
-		
+		if (this.isSmallBlindApostado() && this.isBigBlindApostado()) {
+			novaPartida = true;
+			
+			while (novaPartida) {
+				partidaEmAndamento = true;
+				rodadaEmAndamento = true;
+				
+				int numeroDePartidas = this.getPainel().getPartidas().size();
+				int numero = numeroDePartidas + 1;
+				
+				Partida partida = new Partida();
+				partida.setNumero(numero);
+				partida.setJogadores(getJogadoresDoTorneio());
+				partida.setPartidaEmAndamento(true);
+				
+				Baralho baralho = new Baralho();
+				List<Carta> cartasEmbaralhadas = new ArrayList<>();
+				
+				Jogador dealer = new Jogador();
+				
+				for (Iterator<Jogador> iterator = getJogadoresDoTorneio().iterator(); iterator.hasNext();) {
+					Jogador jogador = (Jogador) iterator.next();
+
+					if (jogador.isVezDeSerDealer()) {
+						dealer = jogador;
+					}
+				}
+				
+				List<Rodada> rodadas = new ArrayList<>();
+				rodadas.addAll(partida.getRodadas());
+				rodadas.add(new Rodada(TipoDeRodada.PRE_FLOP));
+				
+				while (partidaEmAndamento && rodadaEmAndamento) {
+					Rodada ultimaRodada = rodadas.get(rodadas.size() - 1);
+					valorDoTipoDeRodada = ultimaRodada.getTipoDeRodada().ordinal();
+					
+					if (valorDoTipoDeRodada < 4) {
+						cartasEmbaralhadas.addAll(dealer.embaralharCartas(baralho));
+						baralho.setCartas(cartasEmbaralhadas);
+						quantidadeDeRodadaDaPartida = partida.getRodadas().size();
+						if (quantidadeDeRodadaDaPartida == 0) {
+							this.executarRodada(partida);
+						}
+						if (quantidadeDeRodadaDaPartida >= 1) {
+							cartasEmbaralhadas.addAll(dealer.queimarCarta(baralho));
+							this.executarRodada(partida);
+						} 
+					} else {
+						valorDoTipoDeRodada = 4;
+						rodadaEmAndamento = false;
+					}
+					// se alguém tiver aumentado a posta
+					if (!rodadaEmAndamento) {
+						switch (valorDoTipoDeRodada) {
+						case 0:
+							ultimaRodada = new Rodada(TipoDeRodada.FLOP);
+							rodadas.add(ultimaRodada);
+							this.rodadaEmAndamento = true;
+							quantidadeDeRodadaDaPartida++;
+							break;
+
+						case 1:
+							ultimaRodada = new Rodada(TipoDeRodada.TURN);
+							rodadas.add(ultimaRodada);
+							this.rodadaEmAndamento = true;
+							quantidadeDeRodadaDaPartida++;
+							break;
+
+						case 2:
+							ultimaRodada = new Rodada(TipoDeRodada.RIVER);
+							rodadas.add(ultimaRodada);
+							this.rodadaEmAndamento = true;
+							quantidadeDeRodadaDaPartida++;
+							break;
+
+						case 3:
+							ultimaRodada = new Rodada(TipoDeRodada.SHOWDOWN);
+							rodadas.add(ultimaRodada);
+							this.rodadaEmAndamento = true;
+							quantidadeDeRodadaDaPartida++;
+							break;
+
+						case 4:
+							partida.setRodadas(rodadas);
+							this.painel.getPartidas().add(partida);
+							this.partidaEmAndamento = false;
+							this.rodadaEmAndamento = false;
+							rodadas.clear();
+							quantidadeDeRodadaDaPartida = 0;
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
-	
+
 	public void executarRodada(Partida partida) {
-		
+
 	}
-	
+
 	public void avaliarVencedor(Partida partida) {
-		
+
 	}
-	
+
 	public void desempatar() {
-		
+
 	}
-	
+
 	public void fazerPremiacao(Painel painel) {
-		
+
 	}
-	
+
 	public void jogadorTemFichas(Jogador jogador) {
-		
+
 	}
-	
+
 	public void escolherJogadorDaVez(Rodada rodada) {
-		
+
 	}
-	
+
 	public void avaliarVencedorDaRodada(List<Jogador> jogadores, Rodada rodada) {
-		
+
 	}
-	
+
 	public void determinarEmpateDaRodada() {
-		
+
 	}
-	
+
 }

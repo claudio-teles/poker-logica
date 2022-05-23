@@ -32,7 +32,6 @@ public class JogadorHumano extends Jogador {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		mesa.setRodadaEmAndamento(false);
 	}
 
 	@Override

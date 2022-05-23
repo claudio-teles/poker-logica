@@ -213,7 +213,8 @@ public class Jogador {
 			
 			List<Carta> cartasDoBaralhoMisturadas = dealer.embaralharCartas(baralho);
 			
-			for (int i = 0; i < jogadores.size(); i++) {
+			int quantidadeDeJogadores = jogadores.size();
+			for (int i = 0; i < quantidadeDeJogadores; i++) {
 				Jogador jogador = jogadores.get(i);
 				Carta primeiraCarta = cartasDoBaralhoMisturadas.get(i);
 				jogador.getMao().getCartas().set(0, primeiraCarta);
@@ -222,8 +223,8 @@ public class Jogador {
 				baralho.setCartas(cartasDoBaralhoMisturadas);
 			}
 			
-			for (int i = jogadores.size(); i < (2 * jogadores.size()); i++) {
-				Jogador jogador = jogadores.get(i - jogadores.size());
+			for (int i = quantidadeDeJogadores; i < (2 * quantidadeDeJogadores); i++) {
+				Jogador jogador = jogadores.get(i - quantidadeDeJogadores);
 				Carta primeiraCarta = cartasDoBaralhoMisturadas.get(i);
 				jogador.getMao().getCartas().set(1, primeiraCarta);
 				
@@ -343,6 +344,16 @@ public class Jogador {
 	
 	public void mostrarCartasDaMao() {
 		System.out.println("super clase Jogador.mostrarCartasDaMao");
+	}
+	
+	public List<Carta> queimarCarta(Baralho baralho) {
+		Carta primeiraCarta = baralho.getCartas().get(0);
+		Carta ultimaCarta = baralho.getCartas().get(51);
+		
+		baralho.getCartas().set(0, ultimaCarta);
+		baralho.getCartas().set(51, primeiraCarta);
+		
+		return baralho.getCartas();
 	}
 
 	@Override
