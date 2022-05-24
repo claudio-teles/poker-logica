@@ -5,7 +5,7 @@ import java.util.List;
 public class Partida {
 	
 	private int numero;
-	private List<Jogador> jogadores;
+	private Jogador jogador;
 	private boolean partidaEmAndamento;
 	private List<Rodada> rodadas;
 
@@ -19,12 +19,12 @@ public class Partida {
 		this.numero = numero;
 	}
 
-	public List<Jogador> getJogadores() {
-		return jogadores;
+	public Jogador getJogador() {
+		return jogador;
 	}
 
-	public void setJogadores(List<Jogador> jogadores) {
-		this.jogadores = jogadores;
+	public void setJogador(Jogador jogadore) {
+		this.jogador = jogadore;
 	}
 
 	public boolean isPartidaEmAndamento() {

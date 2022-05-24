@@ -10,7 +10,6 @@ public class Mesa {
 
 	private String localimagemPlanoDeFundo;
 	private boolean intencaoEscolherDealer;
-	private boolean vencedor;
 	private Jogador jogadorPremiado;
 	private int ocorrenciaDeDistribuicaoDeCartas;
 	private boolean podeEmbaralhar;
@@ -28,6 +27,8 @@ public class Mesa {
 	private boolean rodadaEmAndamento;
 	private int quantidadeDeRodadaDaPartida;
 	private int valorDoTipoDeRodada;
+	private boolean vencedor;
+	private boolean empate;
 
 	public Mesa() {
 	}
@@ -150,6 +151,14 @@ public class Mesa {
 
 	public void setBigBlindApostado(boolean bigBlindApostado) {
 		this.bigBlindApostado = bigBlindApostado;
+	}
+
+	public boolean isEmpate() {
+		return empate;
+	}
+
+	public void setEmpate(boolean empate) {
+		this.empate = empate;
 	}
 
 	public List<Ficha> entregarStack(int valorDaStack) throws Exception {
@@ -345,7 +354,6 @@ public class Mesa {
 				
 				Partida partida = new Partida();
 				partida.setNumero(numero);
-				partida.setJogadores(getJogadoresDoTorneio());
 				partida.setPartidaEmAndamento(true);
 				
 				Baralho baralho = new Baralho();
@@ -431,7 +439,54 @@ public class Mesa {
 	}
 
 	public void executarRodada(Partida partida) {
-
+		this.setVencedor(partida.getJogador().isVencedor());
+		Rodada ultimaRodada = partida.getRodadas().get(partida.getRodadas().size() - 1);
+		
+		if (
+				this.partidaEmAndamento && this.rodadaEmAndamento && (this.isVencedor() == false)
+				&& (this.empate == false) && (ultimaRodada.getTipoDeRodada() != null)
+			) {
+			TipoDeRodada etapaDaRodada = ultimaRodada.getTipoDeRodada();
+			
+			Jogador jogadorDaVez = new Jogador();
+			
+			for (Jogador jogador : getJogadoresDoTorneio()) {
+				if (jogador.isVezDeJogar()) {
+					jogadorDaVez = jogador;
+				}
+			}
+			
+			if (jogadorDaVez instanceof JogadorHumano) {
+				List<Ficha> aposta = jogadorDaVez.getValorDaUltimaAposta();
+				
+				int somatorioDaAposta = 0;
+				for (Ficha ficha : aposta) {
+					somatorioDaAposta += ficha.getValor();
+				}
+				
+				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.COBRIR && (etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
+					jogadorDaVez.cobrir(somatorioDaAposta);
+				}
+				
+				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.PEDIR_MESA && (etapaDaRodada != TipoDeRodada.PRE_FLOP && etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
+					jogadorDaVez.pedirMesa();
+				}
+				
+				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.AUMENTAR && (etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
+					jogadorDaVez.aumentar(somatorioDaAposta);
+				}
+				
+				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.SAIR  && (etapaDaRodada != TipoDeRodada.PRE_FLOP && etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
+					jogadorDaVez.sair();
+				}
+				
+				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.MOSTRAR_CARTAS && (etapaDaRodada == TipoDeRodada.SHOWDOWN)) {
+					jogadorDaVez.mostrarCartasDaMao();
+				}
+			} else if (jogadorDaVez instanceof JogadorAutomatico) {
+				
+			}
+		}
 	}
 
 	public void avaliarVencedor(Partida partida) {

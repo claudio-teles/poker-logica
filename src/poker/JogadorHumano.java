@@ -34,6 +34,10 @@ public class JogadorHumano extends Jogador {
 		}
 	}
 
+	public AcaoDoJogador escolherAcao(AcaoDoJogador acaoDoJogador) {
+		return acaoDoJogador;
+	}
+
 	@Override
 	public void cobrir(int valor) {
 		// TODO Auto-generated method stub

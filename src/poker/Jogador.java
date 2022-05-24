@@ -17,13 +17,13 @@ public class Jogador {
 	private Mao mao = new Mao();
 	private boolean vezDeJogar;
 	private boolean vencedor;
-	private List<Ficha> fichasDeApostaRodada;
 	private boolean visivel;
 	private AcaoDoJogador acaoDoJogador;
 	private List<Ficha> valorDaUltimaAposta;
 	private boolean vezDeSerDealer = false;
 	private boolean vezDeSerSmallBlind = false;
 	private boolean vezDeSerBigBlind = false;
+	private List<Ficha> fichasDeApostaRodada;
 	
 	public Jogador() {
 		super();
@@ -122,14 +122,6 @@ public class Jogador {
 		this.vencedor = vencedor;
 	}
 
-	public List<Ficha> getFichasDeApostaRodada() {
-		return fichasDeApostaRodada;
-	}
-
-	public void setFichasDeApostaRodada(List<Ficha> fichasDeApostaRodada) {
-		this.fichasDeApostaRodada = fichasDeApostaRodada;
-	}
-
 	public boolean isVisivel() {
 		return visivel;
 	}
@@ -176,6 +168,14 @@ public class Jogador {
 
 	public void setVezDeSerBigBlind(boolean vezDeSerBigBlind) {
 		this.vezDeSerBigBlind = vezDeSerBigBlind;
+	}
+
+	public List<Ficha> getFichasDeApostaRodada() {
+		return fichasDeApostaRodada;
+	}
+
+	public void setFichasDeApostaRodada(List<Ficha> fichasDeApostaRodada) {
+		this.fichasDeApostaRodada = fichasDeApostaRodada;
 	}
 
 	public List<Carta> distribuirCartasDoDealer(Baralho baralho, List<Jogador> jogadores, Mesa mesa) {
@@ -360,8 +360,17 @@ public class Jogador {
 	public String toString() {
 		return "Jogador [indice=" + indice + ", nome=" + nome + ", imagem=" + imagem + ", dinheiro=" + dinheiro
 				+ ", stack=" + stack + ", valorDaFicha=" + valorDaFicha + ", fichas=" + fichas + ", mao=" + mao
-				+ ", vezDeJogar=" + vezDeJogar + ", vencedor=" + vencedor + ", fichasDeApostaRodada="
-				+ fichasDeApostaRodada + ", visivel=" + visivel + ", acaoDoJogador=" + acaoDoJogador + "]";
+				+ ", vezDeJogar=" + vezDeJogar + ", vencedor=" + vencedor + ", visivel=" + visivel + ", acaoDoJogador="
+				+ acaoDoJogador + ", valorDaUltimaAposta=" + valorDaUltimaAposta + ", vezDeSerDealer=" + vezDeSerDealer
+				+ ", vezDeSerSmallBlind=" + vezDeSerSmallBlind + ", vezDeSerBigBlind=" + vezDeSerBigBlind
+				+ ", getIndice()=" + getIndice() + ", getNome()=" + getNome() + ", getImagem()=" + getImagem()
+				+ ", getDinheiro()=" + getDinheiro() + ", getStack()=" + getStack() + ", getValorDaFicha()="
+				+ getValorDaFicha() + ", getFichas()=" + getFichas() + ", getMao()=" + getMao() + ", isVezDeJogar()="
+				+ isVezDeJogar() + ", isVencedor()=" + isVencedor() + ", isVisivel()=" + isVisivel()
+				+ ", getAcaoDoJogador()=" + getAcaoDoJogador() + ", getValorDaUltimaAposta()="
+				+ getValorDaUltimaAposta() + ", isVezDeSerDealer()=" + isVezDeSerDealer() + ", isVezDeSerSmallBlind()="
+				+ isVezDeSerSmallBlind() + ", isVezDeSerBigBlind()=" + isVezDeSerBigBlind() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	
 }
