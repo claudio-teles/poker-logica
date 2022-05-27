@@ -17,7 +17,8 @@ public class Mesa {
 	private boolean smallBlindDefinidoDefinido;
 	private boolean bigBlindDefinido;
 	private boolean blindDefinido;
-	private List<Ficha> blind;
+	private List<Ficha> blind = new ArrayList<>();
+	private List<Ficha> blindAumentada = new ArrayList<>();
 	private Painel painel;
 	private List<Jogador> jogadoresDoTorneio;
 	private boolean smallBlindApostado = false;
@@ -29,9 +30,10 @@ public class Mesa {
 	private int valorDoTipoDeRodada;
 	private boolean vencedor;
 	private boolean empate;
+	private CartasDaMesa cartasDaMesa;
+	private Baralho baralho;
 
-	public Mesa() {
-	}
+	public Mesa() {}
 
 	public String getLocalimagemPlanoDeFundo() {
 		return localimagemPlanoDeFundo;
@@ -121,6 +123,14 @@ public class Mesa {
 		this.blind = blind;
 	}
 
+	public List<Ficha> getBlindAumentada() {
+		return blindAumentada;
+	}
+
+	public void setBlindAumentada(List<Ficha> blindAumentada) {
+		this.blindAumentada = blindAumentada;
+	}
+
 	public Painel getPainel() {
 		return painel;
 	}
@@ -159,6 +169,14 @@ public class Mesa {
 
 	public void setEmpate(boolean empate) {
 		this.empate = empate;
+	}
+
+	public CartasDaMesa getCartasDaMesa() {
+		return cartasDaMesa;
+	}
+
+	public void setCartasDaMesa(CartasDaMesa cartasDaMesa) {
+		this.cartasDaMesa = cartasDaMesa;
 	}
 
 	public List<Ficha> entregarStack(int valorDaStack) throws Exception {
@@ -341,7 +359,7 @@ public class Mesa {
 
 	}
 
-	public void iniciarPartida() {
+	public void iniciarPartida() throws Exception {
 		if (this.isSmallBlindApostado() && this.isBigBlindApostado()) {
 			novaPartida = true;
 			
@@ -457,34 +475,48 @@ public class Mesa {
 			}
 			
 			if (jogadorDaVez instanceof JogadorHumano) {
-				List<Ficha> aposta = jogadorDaVez.getValorDaUltimaAposta();
+				// Espera enquanto o jogador humano faz a aposta e a cada 10 segundos pede para apostar
+				while (((JogadorHumano) jogadorDaVez).fezAposta() == false) {
+					System.out.println("Por favor insira a ação e o valor da aposta!");
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				};
 				
-				int somatorioDaAposta = 0;
-				for (Ficha ficha : aposta) {
-					somatorioDaAposta += ficha.getValor();
+				((JogadorHumano) jogadorDaVez).setFezAposta(false);
+				
+				List<Ficha> aposta = new ArrayList<>();
+				aposta.addAll(jogadorDaVez.getValorDaUltimaAposta());
+				
+				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.COBRIR) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN))) {
+					jogadorDaVez.cobrir(aposta);
 				}
 				
-				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.COBRIR && (etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
-					jogadorDaVez.cobrir(somatorioDaAposta);
-				}
-				
-				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.PEDIR_MESA && (etapaDaRodada != TipoDeRodada.PRE_FLOP && etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
+				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.PEDIR_MESA) && !(etapaDaRodada.equals(TipoDeRodada.PRE_FLOP) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN)))) {
 					jogadorDaVez.pedirMesa();
 				}
 				
-				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.AUMENTAR && (etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
-					jogadorDaVez.aumentar(somatorioDaAposta);
+				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.AUMENTAR) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN))) {
+					jogadorDaVez.aumentar(aposta);
 				}
 				
-				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.SAIR  && (etapaDaRodada != TipoDeRodada.PRE_FLOP && etapaDaRodada != TipoDeRodada.SHOWDOWN)) {
+				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.SAIR)  && !(etapaDaRodada.equals(TipoDeRodada.PRE_FLOP) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN)))) {
 					jogadorDaVez.sair();
 				}
 				
-				if (jogadorDaVez.getAcaoDoJogador() == AcaoDoJogador.MOSTRAR_CARTAS && (etapaDaRodada == TipoDeRodada.SHOWDOWN)) {
+				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.MOSTRAR_CARTAS) && etapaDaRodada.equals(TipoDeRodada.SHOWDOWN)) {
 					jogadorDaVez.mostrarCartasDaMao();
+					((JogadorHumano) jogadorDaVez).setFezAposta(false);
 				}
 			} else if (jogadorDaVez instanceof JogadorAutomatico) {
+				// preencher lista com cartas da mão e da mesa
+				List<Carta> cartas = new ArrayList<>();
+				cartas.addAll(jogadorDaVez.getMao().getCartas());
+				cartas.addAll(getCartasDaMesa().getCartas());
 				
+				Map<AcaoDoJogador, List<Ficha>> acao = ((JogadorAutomatico) jogadorDaVez).escolherAcaoDoJogador(cartas, ultimaRodada.getTipoDeRodada(), this);
 			}
 		}
 	}

@@ -1,9 +1,12 @@
 package poker;
 
+import java.util.List;
+
 public class JogadorHumano extends Jogador {
 	
 	private boolean jogoEncerrado = false;
 	private TipoDeJogador tipoDeJogador = TipoDeJogador.HUMANO;
+	private boolean fezAposta = false;
 	
 	public JogadorHumano() {
 		super();
@@ -25,6 +28,14 @@ public class JogadorHumano extends Jogador {
 		this.tipoDeJogador = tipoDeJogador;
 	}
 
+	public boolean fezAposta() {
+		return fezAposta;
+	}
+
+	public void setFezAposta(boolean fezAposta) {
+		this.fezAposta = fezAposta;
+	}
+
 	public void comprarFichas(int valorDaStack, Mesa mesa) {
 		this.setStack(valorDaStack);
 		try {
@@ -39,9 +50,9 @@ public class JogadorHumano extends Jogador {
 	}
 
 	@Override
-	public void cobrir(int valor) {
+	public void cobrir(List<Ficha> valorDaAposta) {
 		// TODO Auto-generated method stub
-		super.cobrir(valor);
+		super.cobrir(valorDaAposta);
 	}
 
 	@Override
@@ -51,9 +62,9 @@ public class JogadorHumano extends Jogador {
 	}
 
 	@Override
-	public void aumentar(int valor) {
+	public void aumentar(List<Ficha> valorDaAposta) {
 		// TODO Auto-generated method stub
-		super.aumentar(valor);
+		super.aumentar(valorDaAposta);
 	}
 
 	@Override
