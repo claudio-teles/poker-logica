@@ -327,7 +327,7 @@ public class Jogador {
 	}
 	
 	public void cobrir(List<Ficha> valorDaAposta) {
-		System.out.println("super clase Jogador.cobrir()");
+		System.out.println("super clase Jogador.cobrir(valor)");
 	}
 	
 	public void pedirMesa() {
@@ -342,8 +342,8 @@ public class Jogador {
 		System.out.println("super clase Jogador.sair()");
 	}
 	
-	public void mostrarCartasDaMao() {
-		System.out.println("super clase Jogador.mostrarCartasDaMao");
+	public void mostrarCartas(CartasDaMesa cartasDaMesa) {
+		System.out.println("super clase Jogador.mostrarCartasDaMao(cartasDaMesa)");
 	}
 	
 	public List<Carta> queimarCarta(Baralho baralho) {

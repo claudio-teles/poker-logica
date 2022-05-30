@@ -46,7 +46,7 @@ public class JogadorAutomaticoTeste {
 		ja1.setNome("ja1");
 		ja1.getMao().setCartas(cartas);
 		
-		assertEquals(String.valueOf(0.2), String.valueOf(ja1.calcularNivelConfianca(cartas)));
+		assertEquals("0.3332", String.valueOf(ja1.calcularNivelConfianca(cartas)));
 	}
 	
 	@Test
@@ -62,7 +62,7 @@ public class JogadorAutomaticoTeste {
 		ja1.setIndice(2);
 		ja1.setNome("ja2");
 		
-		assertEquals(String.valueOf(0.6), String.valueOf(ja1.calcularNivelConfianca(cartas)));
+		assertEquals("0.9163", String.valueOf(ja1.calcularNivelConfianca(cartas)));
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class JogadorAutomaticoTeste {
 		ja1.setIndice(2);
 		ja1.setNome("ja2");
 		
-		assertEquals(String.valueOf(1.0), String.valueOf(ja1.calcularNivelConfianca(cartas)));
+		assertEquals("0.99960005", String.valueOf(ja1.calcularNivelConfianca(cartas)));
 	}
 
 }

@@ -31,7 +31,9 @@ public class Mesa {
 	private boolean vencedor;
 	private boolean empate;
 	private CartasDaMesa cartasDaMesa;
+	@SuppressWarnings("unused")
 	private Baralho baralho;
+	private boolean houveAumento;
 
 	public Mesa() {}
 
@@ -177,6 +179,14 @@ public class Mesa {
 
 	public void setCartasDaMesa(CartasDaMesa cartasDaMesa) {
 		this.cartasDaMesa = cartasDaMesa;
+	}
+
+	public boolean houveAumento() {
+		return houveAumento;
+	}
+
+	public void setHouveAumento(boolean houveAumento) {
+		this.houveAumento = houveAumento;
 	}
 
 	public List<Ficha> entregarStack(int valorDaStack) throws Exception {
@@ -448,6 +458,7 @@ public class Mesa {
 							this.rodadaEmAndamento = false;
 							rodadas.clear();
 							quantidadeDeRodadaDaPartida = 0;
+							setHouveAumento(false);
 							break;
 						}
 					}
@@ -495,11 +506,14 @@ public class Mesa {
 				}
 				
 				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.PEDIR_MESA) && !(etapaDaRodada.equals(TipoDeRodada.PRE_FLOP) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN)))) {
-					jogadorDaVez.pedirMesa();
+					if (!houveAumento) {
+						jogadorDaVez.pedirMesa();
+					}
 				}
 				
 				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.AUMENTAR) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN))) {
 					jogadorDaVez.aumentar(aposta);
+					setHouveAumento(true);
 				}
 				
 				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.SAIR)  && !(etapaDaRodada.equals(TipoDeRodada.PRE_FLOP) && !(etapaDaRodada.equals(TipoDeRodada.SHOWDOWN)))) {
@@ -507,7 +521,7 @@ public class Mesa {
 				}
 				
 				if (jogadorDaVez.getAcaoDoJogador().equals(AcaoDoJogador.MOSTRAR_CARTAS) && etapaDaRodada.equals(TipoDeRodada.SHOWDOWN)) {
-					jogadorDaVez.mostrarCartasDaMao();
+					jogadorDaVez.mostrarCartas();
 					((JogadorHumano) jogadorDaVez).setFezAposta(false);
 				}
 			} else if (jogadorDaVez instanceof JogadorAutomatico) {

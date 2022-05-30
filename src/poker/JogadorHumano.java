@@ -74,9 +74,8 @@ public class JogadorHumano extends Jogador {
 	}
 
 	@Override
-	public void mostrarCartasDaMao() {
-		// TODO Auto-generated method stub
-		super.mostrarCartasDaMao();
+	public void mostrarCartas(CartasDaMesa cartasDaMesa) {
+		super.mostrarCartas(cartasDaMesa);
 	}
 
 }
